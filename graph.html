@@ -1,0 +1,86 @@
+<html>
+  <head>
+    <title>GRAPHS</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1 user-scalable=no"
+    />
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+      integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI="
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div style="position: relative; height:40vh; width:90vw">
+      <canvas id="myChart"></canvas>
+    </div>
+    <script>
+      const params = new URLSearchParams(document.location.search.substring(1));
+      let country = params.get("country") || "India";
+
+      function render(data) {
+        let dates = [],
+          confirmed = [],
+          deaths = [],
+          recovered = [];
+        for (let day = 0; day < data.length; day++) {
+          dates.push(data[day].date);
+          confirmed.push(data[day].confirmed);
+          deaths.push(data[day].deaths);
+          recovered.push(data[day].recovered);
+        }
+        var myChart = new Chart(ctx, {
+          type: "line",
+          data: {
+            labels: dates,
+            datasets: [
+              {
+                label: "Confirmed",
+                data: confirmed,
+                borderColor: ["rgb(77, 19, 209)"],
+                borderWidth: 2,
+                fill: false
+              },
+              {
+                label: "Deaths",
+                data: deaths,
+                borderColor: ["rgba(255, 99, 132, 1)"],
+                borderWidth: 2,
+                fill: false
+              },
+              {
+                label: "Recovered",
+                data: recovered,
+                borderColor: ["rgb(0, 230, 64)"],
+                borderWidth: 2,
+                fill: false
+              }
+            ]
+          },
+          options: {
+            scales: {
+              yAxes: [
+                {
+                  ticks: {
+                    beginAtZero: true
+                  }
+                }
+              ]
+            },
+            title: {
+              display: true,
+              text: country
+            }
+          }
+        });
+      }
+      var ctx = document.getElementById("myChart");
+      fetch("https://pomber.github.io/covid19/timeseries.json")
+        .then(res => res.json())
+        .then(data => {
+          render(data[country]);
+        });
+    </script>
+  </body>
+</html>

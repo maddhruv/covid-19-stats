@@ -1,0 +1,196 @@
+<html>
+  <head>
+    <title>COVID-19 Interactive Table</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1 user-scalable=no"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.css"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://handsontable.com/static/css/main.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/handsontable@latest/dist/handsontable.full.min.js"></script>
+    <style>
+      body {
+        padding: 10px;
+      }
+      tr:nth-child(even) {
+        background-color: #bbddaa;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="table"></div>
+    <button id="download">Download as CSV</button>
+    <script>
+      var APIS = [
+        "https://corona.lmao.ninja/countries",
+        "https://restcountries.eu/rest/v2/all",
+        "https://raw.githubusercontent.com/maddhruv/median-age/master/data.json"
+      ];
+
+      var data = localStorage.getItem("data");
+
+      render(JSON.parse(data));
+
+      function render(DATA) {
+        var tableDOM = document.getElementById("table");
+        tableDOM.innerHTML = "";
+        var hot = new Handsontable(tableDOM, {
+          data: DATA,
+          colHeaders: [
+            "Country",
+            "Total Cases",
+            "Region",
+            "% of Population",
+            "Cases Today",
+            "Increment",
+            "Total Deaths",
+            "Mortality Rate",
+            "Deaths Today",
+            "Total Recovered",
+            "Recovery Rate",
+            "Active",
+            "Remaining Active",
+            "Critical",
+            "Criticals Relative to Total Cases",
+            "Cases per Million",
+            "Median Age"
+          ],
+          columns: [
+            {
+              data: "country"
+            },
+            {
+              data: "cases"
+            },
+            {
+              data: "region"
+            },
+            {
+              data: "relativePopulations"
+            },
+            {
+              data: "todayCases"
+            },
+            {
+              data: "increment"
+            },
+            {
+              data: "deaths"
+            },
+            {
+              data: "mortalityRate"
+            },
+            {
+              data: "todayDeaths"
+            },
+            {
+              data: "recovered"
+            },
+            {
+              data: "recoveryRate"
+            },
+            {
+              data: "active"
+            },
+            {
+              data: "remainingActive"
+            },
+            {
+              data: "critical"
+            },
+            {
+              data: "criticalsR"
+            },
+            {
+              data: "casesPerOneMillion"
+            },
+            {
+              data: "medianAge"
+            }
+          ],
+          columnSorting: true,
+          readOnly: true,
+          rowHeaders: true,
+          filters: true,
+          dropdownMenu: true,
+          licenseKey: "non-commercial-and-evaluation",
+          fixedColumnsLeft: 2
+        });
+
+        const exportFile = hot.getPlugin("exportFile");
+
+        document
+          .getElementById("download")
+          .addEventListener("click", function() {
+            exportFile.downloadFile("csv", {
+              bom: false,
+              columnDelimiter: ",",
+              columnHeaders: true,
+              fileExtension: "csv",
+              filename: "COVID-19-DATA-maddhruv_[YYYY]-[MM]-[DD]",
+              mimeType: "text/csv",
+              rowDelimiter: "\r\n",
+              rowHeaders: true
+            });
+          });
+      }
+      Promise.all(APIS.map(url => fetch(url).then(res => res.json()))).then(
+        data => {
+          const COVID = data[0],
+            META = data[1],
+            MEDIAN_AGE = data[2].data;
+
+          let DATA = [];
+          for (let i = 0; i < COVID.length; i++) {
+            let obj = COVID[i];
+            obj.increment = (
+              (obj.todayCases / (obj.cases - obj.todayCases)) *
+              100
+            ).toFixed(2);
+            obj.mortalityRate = ((obj.deaths / obj.cases) * 100).toFixed(2);
+            obj.recoveryRate = ((obj.recovered / obj.cases) * 100).toFixed(2);
+            obj.remainingActive = ((obj.active / obj.cases) * 100).toFixed(2);
+            obj.criticalsR = ((obj.critical / obj.cases) * 100).toFixed(2);
+            // META - region and population
+            for (let j = 0; j < META.length; j++) {
+              let country = META[j];
+              if (
+                obj.country === country.name ||
+                obj.country === country.alpha3Code
+              ) {
+                obj = {
+                  ...obj,
+                  region: country.region,
+                  population: country.population,
+                  relativePopulations: (
+                    (obj.cases / country.population) *
+                    100
+                  ).toFixed(4)
+                };
+              }
+            }
+
+            // MEDIAN AGE
+            for (let j = 0; j < MEDIAN_AGE.length; j++) {
+              let country = MEDIAN_AGE[j];
+              if (country.country === obj.country) {
+                obj.medianAge = country.median;
+              }
+            }
+            DATA.push(obj);
+          }
+          localStorage.setItem("data", JSON.stringify(DATA));
+          render(DATA);
+        }
+      );
+    </script>
+  </body>
+</html>
