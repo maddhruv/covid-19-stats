@@ -3,6 +3,7 @@ import { NextPage } from "next";
 import sortBy from "lodash/sortBy";
 import { Grid } from "gridjs";
 
+import Container from "../components/Container";
 import Title from "../components/Title";
 
 const populate = (data) => {
@@ -107,21 +108,23 @@ const Home: NextPage = () => {
     <div>
       <Title>
         <img src="./logo.svg" />
-        CoViD-19 Stats
+        <h1>CoViD-19 Stats</h1>
       </Title>
-      <div id="wrapper" />
-      <div id="details">
-        <ul>
-          <li>
-            <strong>Fatality Rate</strong> is the people deceased out of the
-            total closed cases (total confirmed cases - total active cases)
-          </li>
-          <li>
-            <strong>Recovery Rate</strong> is the people recovered out of the
-            total closed cases (total confirmed cases - total active cases)
-          </li>
-        </ul>
-      </div>
+      <Container>
+        <div id="wrapper" />
+        <div id="details">
+          <ul>
+            <li>
+              <strong>Fatality Rate</strong> is the people deceased out of the
+              total closed cases (total confirmed cases - total active cases)
+            </li>
+            <li>
+              <strong>Recovery Rate</strong> is the people recovered out of the
+              total closed cases (total confirmed cases - total active cases)
+            </li>
+          </ul>
+        </div>
+      </Container>
     </div>
   );
 };
