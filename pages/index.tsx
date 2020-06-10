@@ -3,6 +3,8 @@ import { NextPage } from "next";
 import sortBy from "lodash/sortBy";
 import { Grid } from "gridjs";
 
+import Title from "../components/Title";
+
 const populate = (data) => {
   const sorted = sortBy(data, ["cases"]).reverse();
   return sorted.map((country) => {
@@ -103,6 +105,7 @@ const Home: NextPage = () => {
 
   return (
     <div>
+      <Title>CoViD-19 Stats</Title>
       <div id="wrapper" />
       <div id="details">
         <ul>
