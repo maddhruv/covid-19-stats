@@ -3,6 +3,8 @@ import { NextPage } from "next";
 import sortBy from "lodash/sortBy";
 import { Grid } from "gridjs";
 
+import { FaGithub } from "react-icons/fa";
+
 import Container from "../components/Container";
 import Title from "../components/Title";
 
@@ -109,6 +111,11 @@ const Home: NextPage = () => {
       <Title>
         <img src="./logo.svg" />
         <h1>CoViD-19 Stats</h1>
+        <div id="icons">
+          <a href="https://github.com/maddhruv/covid-19-stats">
+            <FaGithub />
+          </a>
+        </div>
       </Title>
       <Container>
         <div id="wrapper" />

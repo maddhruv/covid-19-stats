@@ -4,7 +4,7 @@ const Title = styled.div`
   background: #ba53de;
   color: #ffffff;
   font-size: 36px;
-  padding: 4px;
+  padding: 8px;
   margin-bottom: 8px;
   box-shadow: 1px 3px 8px rgba(0, 0, 0, 0.17);
   img {
@@ -13,6 +13,9 @@ const Title = styled.div`
   }
   h1 {
     display: inline;
+  }
+  #icons {
+    float: right;
   }
 `;
 
