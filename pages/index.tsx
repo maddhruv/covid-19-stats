@@ -105,7 +105,10 @@ const Home: NextPage = () => {
 
   return (
     <div>
-      <Title>CoViD-19 Stats</Title>
+      <Title>
+        <img src="./logo.svg" />
+        CoViD-19 Stats
+      </Title>
       <div id="wrapper" />
       <div id="details">
         <ul>
