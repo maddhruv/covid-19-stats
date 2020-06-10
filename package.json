@@ -1,0 +1,36 @@
+{
+  "name": "covid-19",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maddhruv/covid-19-stats.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/maddhruv/covid-19-stats/issues"
+  },
+  "homepage": "https://github.com/maddhruv/covid-19-stats#readme",
+  "devDependencies": {
+    "@types/node": "^14.0.12",
+    "@types/react": "^16.9.35",
+    "next": "^9.4.4",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "typescript": "^3.9.5"
+  },
+  "dependencies": {
+    "cross-fetch": "^3.0.4",
+    "gridjs": "^1.3.0",
+    "lodash": "^4.17.15",
+    "styled-components": "^5.1.1"
+  }
+}
